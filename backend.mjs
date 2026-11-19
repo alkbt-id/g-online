@@ -80,7 +80,7 @@ function localBackend() {
       });
       const value = await response.json().catch(() => null);
       if (!response.ok) throw new Error(ogsError(value, response.status));
-      if (value?.redirect) throw new Error('Этот аккаунт входит через Apple, Google или другой сайт: сначала задай пароль на OGS («Forgot password?»).');
+      if (value?.redirect) throw new Error('Пароль не подошёл. У аккаунта есть вход через Apple, Google или другой сайт; если пароля на OGS ещё нет, задай его: online-go.com → Sign in → «Forgot password?».');
       const user = value?.user;
       if (!user || user.anonymous || !value.user_jwt) throw new Error('OGS не принял вход.');
       const session = { user: { id: user.id, username: user.username, ranking: user.ranking }, jwt: value.user_jwt };
