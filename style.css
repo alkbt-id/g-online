@@ -1,0 +1,105 @@
+:root {
+  --ground: #111316;
+  --panel: #1a1d21;
+  --line: #2b3036;
+  --line-strong: #3a4047;
+  --text: #eceef0;
+  --muted: #aeb4bc;
+  --wood: #ddb56c;
+  --wood-ink: #1b1408;
+  --won: #9fd49a;
+  --lost: #ff9a6b;
+  --error: #ff8a4c;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--ground); color: var(--text); }
+body { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; font: 15px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: default; opacity: .4; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--wood); outline-offset: 2px; }
+
+/* Fixed to the screen: on the iPhone home screen 100dvh is taller than the space the page gets. */
+#app { position: fixed; inset: 0; display: flex; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+.loading { margin: auto; }
+.board-area { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 24px; }
+#board { width: 100%; height: 100%; max-height: calc(100dvh - 48px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); display: block; touch-action: none; -webkit-touch-callout: none; }
+#board.active { cursor: pointer; }
+
+.side { flex: none; width: 300px; display: flex; flex-direction: column; gap: 20px; padding: 28px 24px; background: var(--panel); border-left: 1px solid var(--line); overflow-y: auto; }
+.rank { display: flex; flex-direction: column; gap: 2px; }
+.rank-label { font-size: 13px; color: var(--muted); }
+.rank-value { font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -.01em; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.title { font-size: 22px; font-weight: 700; }
+
+.login { display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label { font-size: 13px; color: var(--muted); }
+.field input { height: 44px; font-size: 16px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--ground); color: var(--text); font: inherit; user-select: text; -webkit-user-select: text; }
+.segments { display: flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; }
+.segment { flex: 1; min-height: 36px; padding: 0 6px; border: 0; border-left: 1px solid var(--line-strong); background: none; font-size: 14px; }
+.segment:first-child { border-left: 0; }
+.segment.on { background: var(--wood); color: var(--wood-ink); font-weight: 600; }
+.segment:disabled { opacity: .55; }
+.segment.on:disabled { opacity: 1; }
+.time-text { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.players { display: flex; flex-direction: column; gap: 12px; }
+.player { display: flex; flex-direction: column; gap: 4px; }
+.player-head { display: flex; align-items: baseline; gap: 10px; }
+.player-head .stone-mark { align-self: center; }
+.player .name { min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-rank { flex: none; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.player-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-left: 18px; }
+.player .prisoners { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.clock { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--muted); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+.clock.running { color: var(--text); background: var(--line); }
+.clock.low { color: var(--lost); }
+.stone-mark { flex: none; width: 16px; height: 16px; border-radius: 50%; border: 1px solid #6b727b; }
+.stone-mark.black { background: #0e0f11; }
+.stone-mark.white { background: #f2f1ec; }
+.status { font-size: 17px; font-weight: 600; }
+.note { font-size: 13px; color: var(--error); }
+.actions { display: flex; gap: 8px; }
+.actions button { flex: 1; }
+.primary, .outline { min-height: 44px; padding: 0 16px; border-radius: 8px; font-weight: 600; }
+.primary { background: var(--wood); border: 0; color: var(--wood-ink); }
+.outline { background: none; border: 1px solid var(--line-strong); }
+.outline.danger { border-color: var(--lost); color: var(--lost); }
+
+.result { display: flex; flex-direction: column; gap: 10px; }
+.verdict-line { display: flex; flex-direction: column; gap: 10px; }
+.verdict { font-size: 28px; font-weight: 700; line-height: 1.1; }
+.verdict.won { color: var(--won); }
+.verdict.lost { color: var(--lost); }
+.margin { font-size: 17px; font-weight: 600; }
+.count { border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.count th, .count td { padding: 4px 0; text-align: right; font-weight: 400; }
+.count th:first-child { text-align: left; color: var(--muted); }
+.count tr:first-child th { color: var(--muted); font-size: 13px; }
+.count tr.total th, .count tr.total td { border-top: 1px solid var(--line-strong); font-weight: 700; color: var(--text); padding-top: 8px; }
+.rules { margin-top: auto; font-size: 12px; }
+.link { background: none; border: 0; padding: 0; font-size: 12px; color: var(--wood); text-decoration: underline; text-underline-offset: 2px; }
+.divider { padding-top: 16px; border-top: 1px solid var(--line); }
+
+/* A phone upright: the board across the whole width, the panel under it. */
+@media (max-width: 720px) {
+  #app { flex-direction: column; }
+  html { background: var(--panel); }
+  .board-area { flex: 1 1 0; min-height: 0; padding: 6px; }
+  #board { height: 100%; max-height: none; }
+  .side { flex: none; width: auto; max-height: 62dvh; gap: 14px; padding: 16px 18px; border-left: 0; border-top: 1px solid var(--line); }
+  .rank { flex-direction: row; align-items: baseline; gap: 10px; }
+  .rank-value { font-size: 26px; }
+  .verdict { font-size: 24px; }
+  .players { flex-direction: row; gap: 12px; }
+  .player { flex: 1; min-width: 0; }
+  .player-line { padding-left: 0; flex-wrap: wrap; gap: 2px 8px; }
+  .clock { font-size: 18px; padding: 2px 6px; }
+  #app.over .rules { display: none; }
+  .verdict-line { flex-direction: row; align-items: baseline; gap: 12px; }
+  .count th, .count td { padding: 2px 0; }
+  .count tr.total th, .count tr.total td { padding-top: 5px; }
+}
